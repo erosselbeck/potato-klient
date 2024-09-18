@@ -221,15 +221,15 @@ function beep () {
 }
 let direction = ""
 let havebomb = false
+let playernumber = 0
 let strongshake = false
 let timer = 0
 let boom = 0
 let tick_speed = 0
-let playernumber = 0
 let gamestate = 0
 radio.setGroup(130)
 gamestate = 1
-basic.showNumber(playernumber)
+led.plot(0, 4)
 tick_speed = boom / 10
 timer = boom / 10
 basic.forever(function () {
