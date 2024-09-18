@@ -182,7 +182,7 @@ radio.onReceivedValue(function (name, value) {
         } else if (value >= -99 && value <= 0) {
             playernumber = value * -1 + 1
             basic.showNumber(playernumber)
-            basic.pause(500)
+            basic.pause(1000)
             basic.clearScreen()
         }
     } else if (value == -255) {
