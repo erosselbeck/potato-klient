@@ -1,3 +1,15 @@
+function explode () {
+    basic.showLeds(`
+        # . . . #
+        . # . # .
+        . . # . .
+        . # . # .
+        # . . . #
+        `)
+    basic.pause(1000)
+    basic.clearScreen()
+    basic.showString("GAME OVER")
+}
 // Mäter om man skakar hårt eller inte.
 input.onGesture(Gesture.EightG, function () {
     strongshake = true
@@ -8,71 +20,6 @@ input.onButtonPressed(Button.A, function () {
         basic.pause(5000)
     }
 })
-function _throw () {
-    if (direction == "forward" && strongshake == true) {
-        radio.sendString("*pass_F")
-        radio.sendValue("*pass_F", timer)
-        basic.showLeds(`
-            . . # . .
-            . # . # .
-            # . # . #
-            . # . # .
-            # . . . #
-            `)
-    } else if (direction == "right" && strongshake == true) {
-        radio.sendString("*pass_HH")
-        radio.sendValue("*pass_HH", timer)
-        basic.showLeds(`
-            # . # . .
-            . # . # .
-            . . # . #
-            . # . # .
-            # . # . .
-            `)
-    } else if (direction == "left" && strongshake == true) {
-        radio.sendString("*pass_VV")
-        radio.sendValue("*pass_VV", timer)
-        basic.showLeds(`
-            . . # . #
-            . # . # .
-            # . # . .
-            . # . # .
-            . . # . #
-            `)
-    } else if (direction == "forward") {
-        radio.sendString("*pass_F")
-        radio.sendValue("*pass_F", timer)
-        basic.showLeds(`
-            . . . . .
-            . . # . .
-            . # . # .
-            # . . . #
-            . . . . .
-            `)
-    } else if (direction == "right") {
-        radio.sendString("*pass_H")
-        radio.sendValue("*pass_H", timer)
-        basic.showLeds(`
-            . # . . .
-            . . # . .
-            . . . # .
-            . . # . .
-            . # . . .
-            `)
-    } else if (direction == "left") {
-        radio.sendString("*pass_V")
-        radio.sendValue("*pass_V", timer)
-        basic.showLeds(`
-            . . . # .
-            . . # . .
-            . # . . .
-            . . # . .
-            . . . # .
-            `)
-    }
-    basic.pause(500)
-    basic.clearScreen()
-}
 input.onButtonPressed(Button.B, function () {
     if (gamestate == 1) {
         basic.showNumber(playernumber)
@@ -113,7 +60,7 @@ input.onGesture(Gesture.Shake, function () {
             }
             // För att förhindra att pausen triggar om man skakar utan att hålla ner en knapp.
             if (direction != "") {
-                // Pausen finns för att microbiten ska kunna mäta hur hårt man skakar. 
+                // Pausen finns för att microbiten ska kunna mäta hur hårt man skakar.
                 // 
                 // Eftersom det inte går att nå 6g utan att skaka först, hade koden annars skickat signalen direkt innan den hunnit mäta 6g.
                 basic.pause(500)
@@ -124,11 +71,76 @@ input.onGesture(Gesture.Shake, function () {
         }
     }
 })
+function _throw () {
+    if (direction == "forward" && strongshake == true) {
+        radio.sendString("*pass_F")
+        radio.sendValue("*pass_F", boom)
+        basic.showLeds(`
+            . . # . .
+            . # . # .
+            # . # . #
+            . # . # .
+            # . . . #
+            `)
+    } else if (direction == "right" && strongshake == true) {
+        radio.sendString("*pass_HH")
+        radio.sendValue("*pass_HH", boom)
+        basic.showLeds(`
+            # . # . .
+            . # . # .
+            . . # . #
+            . # . # .
+            # . # . .
+            `)
+    } else if (direction == "left" && strongshake == true) {
+        radio.sendString("*pass_VV")
+        radio.sendValue("*pass_VV", boom)
+        basic.showLeds(`
+            . . # . #
+            . # . # .
+            # . # . .
+            . # . # .
+            . . # . #
+            `)
+    } else if (direction == "forward") {
+        radio.sendString("*pass_F")
+        radio.sendValue("*pass_F", boom)
+        basic.showLeds(`
+            . . . . .
+            . . # . .
+            . # . # .
+            # . . . #
+            . . . . .
+            `)
+    } else if (direction == "right") {
+        radio.sendString("*pass_H")
+        radio.sendValue("*pass_H", boom)
+        basic.showLeds(`
+            . # . . .
+            . . # . .
+            . . . # .
+            . . # . .
+            . # . . .
+            `)
+    } else if (direction == "left") {
+        radio.sendString("*pass_V")
+        radio.sendValue("*pass_V", boom)
+        basic.showLeds(`
+            . . . # .
+            . . # . .
+            . # . . .
+            . . # . .
+            . . . # .
+            `)
+    }
+    basic.pause(500)
+    basic.clearScreen()
+}
 radio.onReceivedValue(function (name, value) {
     if (name == control.deviceName()) {
         if (value > 0) {
             havebomb = true
-            timer = value
+            boom = value
         } else if (value == -202) {
             gamestate = 4
         } else if (value == -205) {
@@ -146,20 +158,50 @@ radio.onReceivedValue(function (name, value) {
     	
     }
 })
-let havebomb = false
-let timer = 0
+function ticker () {
+    if (timer < boom) {
+        if (tick_speed > 200) {
+            beep()
+            basic.pause(tick_speed)
+            tick_speed += -200
+            timer += 200
+            beep()
+        } else if (tick_speed <= 200) {
+            timer += 200
+            beep()
+            basic.pause(tick_speed)
+            beep()
+        }
+    } else {
+        explode()
+        gamestate = 3
+    }
+}
+function beep () {
+    led.toggle(4, 0)
+}
 let direction = ""
+let havebomb = false
 let strongshake = false
+let timer = 0
+let boom = 0
+let tick_speed = 0
 let playernumber = 0
 let gamestate = 0
 radio.setGroup(130)
 gamestate = 1
 basic.showNumber(playernumber)
+tick_speed = boom / 10
+timer = boom / 10
 basic.forever(function () {
     while (havebomb == true) {
-        basic.showIcon(IconNames.Ghost)
-        basic.pause(500)
-        basic.clearScreen()
-        basic.pause(500)
+        basic.showLeds(`
+            . . . . #
+            . # # . #
+            # # # # #
+            # # # # .
+            . # # . .
+            `)
+        ticker()
     }
 })
