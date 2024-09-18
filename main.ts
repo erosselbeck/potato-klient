@@ -149,6 +149,7 @@ radio.onReceivedValue(function (name, value) {
             boom = value
         } else if (value == -202) {
             gamestate = 4
+            ShowVictoryScreen()
         } else if (value == -205) {
             havebomb = false
         } else if (value >= -99 && value <= 0) {
