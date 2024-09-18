@@ -26,6 +26,7 @@ input.onButtonPressed(Button.A, function () {
         basic.pause(5000)
     }
 })
+// DEBUGFUNKTION som visar gamestate
 input.onButtonPressed(Button.B, function () {
     if (gamestate == 1) {
         basic.showNumber(playernumber)
@@ -62,6 +63,19 @@ input.onButtonPressed(Button.B, function () {
             . # . . .
             . . # . .
             # # . . .
+            `)
+        basic.pause(1000)
+        basic.clearScreen()
+    }
+    if (gamestate == 4) {
+        basic.showNumber(playernumber)
+        basic.pause(1000)
+        basic.showLeds(`
+            # . # . .
+            # . # . .
+            # # # . .
+            . . # . .
+            . . . . .
             `)
         basic.pause(1000)
         basic.clearScreen()
