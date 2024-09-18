@@ -26,29 +26,6 @@ input.onButtonPressed(Button.A, function () {
         basic.pause(5000)
     }
 })
-input.onGesture(Gesture.Shake, function () {
-    if (gamestate == 2) {
-        if (havebomb == true) {
-            if (input.buttonIsPressed(Button.AB)) {
-                direction = "forward"
-            } else if (input.buttonIsPressed(Button.B)) {
-                direction = "right"
-            } else if (input.buttonIsPressed(Button.A)) {
-                direction = "left"
-            }
-            // För att förhindra att pausen triggar om man skakar utan att hålla ner en knapp.
-            if (direction != "") {
-                // Pausen finns för att microbiten ska kunna mäta hur hårt man skakar.
-                // 
-                // Eftersom det inte går att nå 6g utan att skaka först, hade koden annars skickat signalen direkt innan den hunnit mäta 6g.
-                basic.pause(500)
-                _throw()
-                direction = ""
-                strongshake = false
-            }
-        }
-    }
-})
 input.onButtonPressed(Button.B, function () {
     if (gamestate == 1) {
         basic.showNumber(playernumber)
@@ -75,6 +52,42 @@ input.onButtonPressed(Button.B, function () {
             `)
         basic.pause(1000)
         basic.clearScreen()
+    }
+    if (gamestate == 3) {
+        basic.showNumber(playernumber)
+        basic.pause(1000)
+        basic.showLeds(`
+            # # . . .
+            . . # . .
+            . # . . .
+            . . # . .
+            # # . . .
+            `)
+        basic.pause(1000)
+        basic.clearScreen()
+    }
+})
+input.onGesture(Gesture.Shake, function () {
+    if (gamestate == 2) {
+        if (havebomb == true) {
+            if (input.buttonIsPressed(Button.AB)) {
+                direction = "forward"
+            } else if (input.buttonIsPressed(Button.B)) {
+                direction = "right"
+            } else if (input.buttonIsPressed(Button.A)) {
+                direction = "left"
+            }
+            // För att förhindra att pausen triggar om man skakar utan att hålla ner en knapp.
+            if (direction != "") {
+                // Pausen finns för att microbiten ska kunna mäta hur hårt man skakar.
+                // 
+                // Eftersom det inte går att nå 6g utan att skaka först, hade koden annars skickat signalen direkt innan den hunnit mäta 6g.
+                basic.pause(500)
+                _throw()
+                direction = ""
+                strongshake = false
+            }
+        }
     }
 })
 function _throw () {
