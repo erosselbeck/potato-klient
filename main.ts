@@ -106,7 +106,6 @@ input.onGesture(Gesture.Shake, function () {
 })
 function _throw () {
     if (direction == "forward" && strongshake == true) {
-        radio.sendString("*pass_F")
         radio.sendValue("*pass_F", boom)
         basic.showLeds(`
             . . # . .
@@ -116,7 +115,6 @@ function _throw () {
             # . . . #
             `)
     } else if (direction == "right" && strongshake == true) {
-        radio.sendString("*pass_HH")
         radio.sendValue("*pass_HH", boom)
         basic.showLeds(`
             # . # . .
@@ -126,7 +124,6 @@ function _throw () {
             # . # . .
             `)
     } else if (direction == "left" && strongshake == true) {
-        radio.sendString("*pass_VV")
         radio.sendValue("*pass_VV", boom)
         basic.showLeds(`
             . . # . #
@@ -136,7 +133,6 @@ function _throw () {
             . . # . #
             `)
     } else if (direction == "forward") {
-        radio.sendString("*pass_F")
         radio.sendValue("*pass_F", boom)
         basic.showLeds(`
             . . . . .
@@ -146,7 +142,6 @@ function _throw () {
             . . . . .
             `)
     } else if (direction == "right") {
-        radio.sendString("*pass_H")
         radio.sendValue("*pass_H", boom)
         basic.showLeds(`
             . # . . .
@@ -156,7 +151,6 @@ function _throw () {
             . # . . .
             `)
     } else if (direction == "left") {
-        radio.sendString("*pass_V")
         radio.sendValue("*pass_V", boom)
         basic.showLeds(`
             . . . # .
