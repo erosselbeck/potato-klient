@@ -173,6 +173,7 @@ radio.onReceivedValue(function (name, value) {
             ShowVictoryScreen()
         } else if (value == -205) {
             havebomb = false
+            basic.clearScreen()
         } else if (value >= -99 && value <= 0) {
             playernumber = value * -1 + 1
             basic.showNumber(playernumber)
