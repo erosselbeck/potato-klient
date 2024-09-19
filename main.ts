@@ -30,7 +30,7 @@ input.onButtonPressed(Button.A, function () {
 input.onButtonPressed(Button.B, function () {
     if (gamestate == 1) {
         basic.showNumber(playernumber)
-        basic.pause(1000)
+        basic.pause(500)
         basic.showLeds(`
             # # . . .
             . # . . .
@@ -38,8 +38,9 @@ input.onButtonPressed(Button.B, function () {
             # # # . .
             . . . . .
             `)
-        basic.pause(1000)
+        basic.pause(500)
         basic.clearScreen()
+        led.plot(0, 4)
     }
     if (gamestate == 2) {
         basic.showNumber(playernumber)
@@ -51,8 +52,11 @@ input.onButtonPressed(Button.B, function () {
             # # # . .
             . . . . .
             `)
-        basic.pause(1000)
+        basic.pause(500)
+        basic.showNumber(boom)
+        basic.pause(500)
         basic.clearScreen()
+        led.plot(1, 4)
     }
     if (gamestate == 3) {
         basic.showNumber(playernumber)
@@ -174,8 +178,9 @@ radio.onReceivedValue(function (name, value) {
         } else if (value == -205) {
             havebomb = false
             basic.clearScreen()
+            led.plot(1, 4)
         } else if (value >= -99 && value <= 0) {
-            playernumber = value * -1 + 1
+            playernumber = value * -1
             basic.showNumber(playernumber)
             basic.pause(1000)
             basic.clearScreen()
@@ -188,24 +193,12 @@ radio.onReceivedValue(function (name, value) {
     } else if (name == "newGame") {
         basic.showString("Restarting")
         gamestate = 1
-    } else {
-    	
     }
 })
 function ticker () {
-    if (timer < boom) {
-        if (tick_speed > 200) {
-            beep()
-            basic.pause(tick_speed)
-            tick_speed += -200
-            timer += 200
-            beep()
-        } else if (tick_speed <= 200) {
-            timer += 200
-            beep()
-            basic.pause(tick_speed)
-            beep()
-        }
+    if (boom > 0) {
+        boom += -1
+        basic.pause(1000)
     } else {
         explode()
         gamestate = 3
@@ -216,17 +209,13 @@ function beep () {
 }
 let direction = ""
 let havebomb = false
+let boom = 0
 let playernumber = 0
 let strongshake = false
-let timer = 0
-let boom = 0
-let tick_speed = 0
 let gamestate = 0
 radio.setGroup(130)
 gamestate = 1
 led.plot(0, 4)
-tick_speed = boom / 10
-timer = boom / 10
 basic.forever(function () {
     while (havebomb == true) {
         basic.showLeds(`
