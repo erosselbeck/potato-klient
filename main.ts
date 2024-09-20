@@ -1,4 +1,5 @@
 function explode () {
+    radio.sendValue("*boom", -1)
     basic.showLeds(`
         # . . . #
         . # . # .
@@ -170,6 +171,7 @@ function _throw () {
 radio.onReceivedValue(function (name, value) {
     if (name == control.deviceName()) {
         if (value > 0) {
+            radio.sendValue("*gotit", -1)
             havebomb = true
             boom = value
         } else if (value == -202) {
@@ -184,6 +186,10 @@ radio.onReceivedValue(function (name, value) {
             basic.showNumber(playernumber)
             basic.pause(1000)
             basic.clearScreen()
+        } else if (value >= -399 && value < -300) {
+            basic.showString("p. " + (value + 300) * -1)
+        } else {
+        	
         }
     } else if (value == -255) {
         gamestate = 2
