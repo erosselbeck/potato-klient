@@ -181,6 +181,7 @@ radio.onReceivedValue(function (name, value) {
             radio.sendValue("*gotit", -1)
             havebomb = true
             boom = value
+            tick_speed = boom / 10
         } else if (value == -202) {
             gamestate = 3
             ShowVictoryScreen()
@@ -208,31 +209,25 @@ radio.onReceivedValue(function (name, value) {
 })
 function ticker () {
     if (boom > 0) {
-        boom += -1
-        basic.pause(1000)
+        if (tick_speed > 200) {
+            basic.pause(tick_speed)
+            tick_speed += -200
+            boom += -1000
+            beep()
+        } else if (tick_speed <= 200) {
+            basic.pause(tick_speed)
+            boom += -1000
+            beep()
+        }
     } else {
         gamestate = 3
+        havebomb = false
         explode()
     }
-    if (tick_speed > 200) {
-        beep()
-        basic.pause(tick_speed)
-        tick_speed += -200
-        timer += 200
-        beep()
-    } else if (tick_speed <= 200) {
-        timer += 200
-        beep()
-        basic.pause(tick_speed)
-        beep()
-    }
-    tick_speed = boom / 10
-    timer = boom / 10
 }
 function beep () {
     led.toggle(4, 0)
 }
-let timer = 0
 let tick_speed = 0
 let direction = ""
 let havebomb = false
