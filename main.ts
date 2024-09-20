@@ -14,9 +14,8 @@ function explode () {
 }
 function ShowVictoryScreen () {
     basic.showIcon(IconNames.Target)
-    basic.pause(500)
-    basic.showString("You win!")
     basic.pause(1000)
+    basic.showString("You win!")
     showranking = true
 }
 // Mäter om man skakar hårt eller inte.
@@ -40,62 +39,7 @@ input.onButtonPressed(Button.AB, function () {
 })
 // DEBUGFUNKTION som visar gamestate
 input.onButtonPressed(Button.B, function () {
-    if (gamestate == 1) {
-        basic.showNumber(playernumber)
-        basic.pause(500)
-        basic.showLeds(`
-            # # . . .
-            . # . . .
-            . # . . .
-            # # # . .
-            . . . . .
-            `)
-        basic.pause(500)
-        basic.clearScreen()
-        led.plot(0, 4)
-    }
-    if (gamestate == 2) {
-        basic.showNumber(playernumber)
-        basic.pause(1000)
-        basic.showLeds(`
-            # # . . .
-            . . # . .
-            . # . . .
-            # # # . .
-            . . . . .
-            `)
-        basic.pause(500)
-        basic.showNumber(boom)
-        basic.pause(500)
-        basic.clearScreen()
-        led.plot(1, 4)
-    }
-    if (gamestate == 3) {
-        basic.showNumber(playernumber)
-        basic.pause(1000)
-        basic.showLeds(`
-            # # . . .
-            . . # . .
-            . # . . .
-            . . # . .
-            # # . . .
-            `)
-        basic.pause(1000)
-        basic.clearScreen()
-    }
-    if (gamestate == 4) {
-        basic.showNumber(playernumber)
-        basic.pause(1000)
-        basic.showLeds(`
-            # . # . .
-            # . # . .
-            # # # . .
-            . . # . .
-            . . . . .
-            `)
-        basic.pause(1000)
-        basic.clearScreen()
-    }
+	
 })
 input.onGesture(Gesture.Shake, function () {
     if (gamestate == 2) {
@@ -233,11 +177,11 @@ function beep () {
     led.toggle(4, 0)
 }
 let rankingnumber = 0
+let playernumber = 0
 let tick_speed = 0
 let direction = ""
-let havebomb = false
 let boom = 0
-let playernumber = 0
+let havebomb = false
 let strongshake = false
 let showranking = false
 let gamestate = 0
@@ -255,13 +199,15 @@ basic.forever(function () {
             `)
         ticker()
     }
-    while (showranking == true) {
-        if (rankingnumber > 1) {
+    if (rankingnumber > 1) {
+        while (showranking == true) {
             basic.showIcon(IconNames.Skull)
             basic.pause(1000)
             basic.showNumber(rankingnumber)
             basic.pause(1000)
-        } else if (rankingnumber == 1) {
+        }
+    } else if (rankingnumber == 1) {
+        while (showranking == true) {
             basic.showIcon(IconNames.Target)
             basic.pause(1000)
             basic.showNumber(rankingnumber)
