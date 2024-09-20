@@ -1,5 +1,5 @@
 function explode () {
-    radio.sendValue("*boom", -1)
+    radio.sendValue("*boom", 0)
     basic.showLeds(`
         # . . . #
         . # . # .
@@ -25,6 +25,13 @@ input.onButtonPressed(Button.A, function () {
     if (gamestate == 1) {
         radio.sendValue(control.deviceName(), -199)
         basic.pause(5000)
+    }
+})
+input.onButtonPressed(Button.AB, function () {
+    if (gamestate == 3) {
+        gamestate = 1
+        basic.clearScreen()
+        led.plot(4, 0)
     }
 })
 // DEBUGFUNKTION som visar gamestate
@@ -175,7 +182,7 @@ radio.onReceivedValue(function (name, value) {
             havebomb = true
             boom = value
         } else if (value == -202) {
-            gamestate = 4
+            gamestate = 3
             ShowVictoryScreen()
         } else if (value == -205) {
             havebomb = false
@@ -188,8 +195,6 @@ radio.onReceivedValue(function (name, value) {
             basic.clearScreen()
         } else if (value >= -399 && value < -300) {
             basic.showString("p. " + (value + 300) * -1)
-        } else {
-        	
         }
     } else if (value == -255) {
         gamestate = 2
@@ -207,13 +212,28 @@ function ticker () {
         basic.pause(1000)
     } else {
         gamestate = 3
-        havebomb = false
         explode()
     }
+    if (tick_speed > 200) {
+        beep()
+        basic.pause(tick_speed)
+        tick_speed += -200
+        timer += 200
+        beep()
+    } else if (tick_speed <= 200) {
+        timer += 200
+        beep()
+        basic.pause(tick_speed)
+        beep()
+    }
+    tick_speed = boom / 10
+    timer = boom / 10
 }
 function beep () {
     led.toggle(4, 0)
 }
+let timer = 0
+let tick_speed = 0
 let direction = ""
 let havebomb = false
 let boom = 0
@@ -224,7 +244,7 @@ radio.setGroup(130)
 gamestate = 1
 led.plot(0, 4)
 basic.forever(function () {
-    while (havebomb == true) {
+    while (havebomb == true && gamestate == 2) {
         basic.showLeds(`
             . . . . #
             . # # . #
