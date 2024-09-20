@@ -206,8 +206,9 @@ function ticker () {
         boom += -1
         basic.pause(1000)
     } else {
-        explode()
         gamestate = 3
+        havebomb = false
+        explode()
     }
 }
 function beep () {
