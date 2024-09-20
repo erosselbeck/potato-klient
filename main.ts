@@ -88,7 +88,7 @@ input.onButtonPressed(Button.B, function () {
 })
 input.onGesture(Gesture.Shake, function () {
     if (gamestate == 2) {
-        if (havebomb == true) {
+        if (havebomb == true && boom >= 2) {
             if (input.buttonIsPressed(Button.AB)) {
                 direction = "forward"
             } else if (input.buttonIsPressed(Button.B)) {
