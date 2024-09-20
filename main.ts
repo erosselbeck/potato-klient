@@ -10,12 +10,14 @@ function explode () {
     basic.pause(1000)
     basic.clearScreen()
     basic.showString("GAME OVER")
+    showranking = true
 }
 function ShowVictoryScreen () {
     basic.showIcon(IconNames.Target)
     basic.pause(500)
     basic.showString("You win!")
     basic.pause(1000)
+    showranking = true
 }
 // Mäter om man skakar hårt eller inte.
 input.onGesture(Gesture.EightG, function () {
@@ -29,9 +31,11 @@ input.onButtonPressed(Button.A, function () {
 })
 input.onButtonPressed(Button.AB, function () {
     if (gamestate == 3) {
+        showranking = false
         gamestate = 1
         basic.clearScreen()
-        led.plot(4, 0)
+        led.plot(0, 4)
+        led.plot(0, 3)
     }
 })
 // DEBUGFUNKTION som visar gamestate
@@ -195,7 +199,7 @@ radio.onReceivedValue(function (name, value) {
             basic.pause(1000)
             basic.clearScreen()
         } else if (value >= -399 && value < -300) {
-            basic.showString("p. " + (value + 300) * -1)
+            rankingnumber = (value + 300) * -1
         }
     } else if (value == -255) {
         gamestate = 2
@@ -228,12 +232,14 @@ function ticker () {
 function beep () {
     led.toggle(4, 0)
 }
+let rankingnumber = 0
 let tick_speed = 0
 let direction = ""
 let havebomb = false
 let boom = 0
 let playernumber = 0
 let strongshake = false
+let showranking = false
 let gamestate = 0
 radio.setGroup(130)
 gamestate = 1
@@ -248,5 +254,18 @@ basic.forever(function () {
             . # # . .
             `)
         ticker()
+    }
+    while (showranking == true) {
+        if (rankingnumber > 1) {
+            basic.showIcon(IconNames.Skull)
+            basic.pause(1000)
+            basic.showNumber(rankingnumber)
+            basic.pause(1000)
+        } else if (rankingnumber == 1) {
+            basic.showIcon(IconNames.Target)
+            basic.pause(1000)
+            basic.showNumber(rankingnumber)
+            basic.pause(1000)
+        }
     }
 })
